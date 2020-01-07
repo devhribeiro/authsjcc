@@ -1,34 +1,44 @@
 {
   "name": "react-native-sjcc-login",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+  "main": "src/index.js",
+  "author": {
+    "name": "Vizir Software Studio"
+  },
+  "contributors": [
+    {
+      "name": "Mário Valney"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/myvizir/react-native-sjcc-login.git"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-native start"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {},
+  "peerDependencies": {
+    "react-native": ">=0.60.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.8.0",
+    "eslint-config-fb-strict": "22.1.0",
+    "eslint-plugin-babel": "^5.2.1",
+    "eslint-plugin-flowtype": "2.43.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "21.8.0",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-prettier": "2.6.0",
+    "eslint-plugin-react": "7.6.1",
+    "eslint-plugin-relay": "0.0.23",
+    "eslint": "5.1.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.54.1",
+    "react-native": "0.60.0-rc.1",
+    "react": "16.8.6"
   }
 }
