@@ -9,5 +9,5 @@ const options = {
 };
 
 fs.writeFile(filename, "{}", options, (err) => {
-  if (err) console.log(err);
+  if (err && err.code !== 'EEXIST') console.warn(err.toString());
 });
