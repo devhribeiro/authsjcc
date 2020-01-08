@@ -15,7 +15,7 @@
     "url": "git+https://bitbucket.org/myvizir/react-native-sjcc-login.git"
   },
   "scripts": {
-    "start": "react-native start"
+    "postinstall": "scripts/install.js"
   },
   "dependencies": {},
   "peerDependencies": {
