@@ -20,7 +20,9 @@
   "dependencies": {},
   "peerDependencies": {
     "react": "16.9.0",
-    "react-native": ">=0.60.0"
+    "react-native": ">=0.60.0",
+    "react-native-elements": "^1.2.7",
+    "@react-native-community/async-storage": "^1.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

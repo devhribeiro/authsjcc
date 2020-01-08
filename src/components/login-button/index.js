@@ -20,8 +20,6 @@ const titleStyle = {
 
 class SJCC_LoginButton extends Component {
   render() {
-    console.log( SJCC_Login.login() );
-
     const props = {...this.props};
 
     props.title = props.title || 'Login';
@@ -29,8 +27,8 @@ class SJCC_LoginButton extends Component {
     props.titleStyle = [ titleStyle, this.props.titleStyle || {} ];
     props.containerStyle = [ containerStyle, this.props.containerStyle || {} ];
 
-    props.onPress = () => {
-
+    props.onPress = async () => {
+      await SJCC_Login.login();
     };
 
     return (
