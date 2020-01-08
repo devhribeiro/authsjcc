@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { Button } from 'react-native-elements';
 
+import SJCC_Login from '../../models/SJCC_Login';
+
 const containerStyle = {
   paddingHorizontal: '15%',
 };
@@ -18,6 +20,8 @@ const titleStyle = {
 
 class SJCC_LoginButton extends Component {
   render() {
+    console.log( SJCC_Login.login() );
+
     const props = {...this.props};
 
     props.title = props.title || 'Login';
