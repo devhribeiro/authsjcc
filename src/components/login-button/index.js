@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import { Button } from 'react-native-elements';
 
-import SJCC_Login from '../../models/SJCC_Login';
-
 const containerStyle = {
   paddingHorizontal: '15%',
 };
@@ -26,10 +24,6 @@ class SJCC_LoginButton extends Component {
     props.buttonStyle = [ buttonStyle, this.props.buttonStyle || {} ];
     props.titleStyle = [ titleStyle, this.props.titleStyle || {} ];
     props.containerStyle = [ containerStyle, this.props.containerStyle || {} ];
-
-    props.onPress = async () => {
-      await SJCC_Login.login();
-    };
 
     return (
       <Button {...props} />

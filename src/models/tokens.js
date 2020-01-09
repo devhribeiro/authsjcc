@@ -11,7 +11,7 @@ export default Tokens = {
         return token;
       }
     } catch (e) {
-      console.error(e);
+      console.error('[Tokens]', e);
     }
 
     return '';
@@ -24,7 +24,7 @@ export default Tokens = {
         return token;
       }
     } catch (e) {
-      console.error(e);
+      console.error('[Tokens]', e);
     }
 
     return '';
@@ -33,14 +33,14 @@ export default Tokens = {
   saveTokens: async (tokens) => {
     try {
       if (tokens.access_token) {
-        AsyncStorage.setItem(ACCESS_TOKEN, tokens.access_token)
+        await AsyncStorage.setItem(ACCESS_TOKEN, tokens.access_token);
       }
 
       if (tokens.refresh_token) {
-        AsyncStorage.setItem(REFRESH_TOKEN, tokens.refresh_token)
+        await AsyncStorage.setItem(REFRESH_TOKEN, tokens.refresh_token);
       }
     } catch (e) {
-      console.error(e);
+      console.error('[Tokens]', e);
     }
   }
 };
