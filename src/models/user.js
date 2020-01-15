@@ -21,7 +21,7 @@ class User {
       const userdata = await AsyncStorage.getItem(USER);
       return this.parseUserinfo(JSON.parse(userdata));
     } catch (e) {
-      console.error('[Tokens]', e);
+      console.error('[User]', e);
     }
   }
 
@@ -30,7 +30,7 @@ class User {
     try {
       await AsyncStorage.setItem(USER, JSON.stringify(this));
     } catch (e) {
-      console.error('[Tokens]', e);
+      console.error('[User]', e);
     }
   }
 

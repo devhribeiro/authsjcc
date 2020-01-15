@@ -3,31 +3,38 @@ import AsyncStorage from '@react-native-community/async-storage';
 const ACCESS_TOKEN = '_sjcc_access_token';
 const REFRESH_TOKEN = '_sjcc_refresh_token';
 
+const tryStorage = async (callback) => {
+  try {
+    callback();
+  } catch (e) {
+    console.error('[Tokens]', e);
+  }
+};
+
 export default Tokens = {
   getAccessToken: async (tokens) => {
-    try {
+    tryStorage(async () => {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN);
-      if (token) {
-        return token;
-      }
-    } catch (e) {
-      console.error('[Tokens]', e);
-    }
+      return token ? token : '';
+    });
 
     return '';
   },
 
   getRefreshToken: async (tokens) => {
-    try {
+    tryStorage(async () => {
       const token = await AsyncStorage.getItem(REFRESH_TOKEN);
-      if (token) {
-        return token;
-      }
-    } catch (e) {
-      console.error('[Tokens]', e);
-    }
+      return token ? token : '';
+    });
 
     return '';
+  },
+
+  forgetTokens: async () => {
+    tryStorage(async () => {
+      await AsyncStorage.removeItem(ACCESS_TOKEN);
+      await AsyncStorage.removeItem(REFRESH_TOKEN);
+    });
   },
 
   saveTokens: async (tokens) => {

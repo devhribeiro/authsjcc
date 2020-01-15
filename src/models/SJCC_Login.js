@@ -22,7 +22,7 @@ class SJCC_LoginManager {
     this.user = new User();
 
     // TODO: make configuration environment
-    this.baseUrl = 'https://signin-wall-staging.accounts.ne10.com.br//api/v2/auth';
+    this.baseUrl = 'https://signin-wall-staging.accounts.ne10.com.br/api/v2/auth';
   }
 
   buildUrl = (path) => {
@@ -61,13 +61,16 @@ class SJCC_LoginManager {
 const manager = new SJCC_LoginManager();
 
 const SJCC_Login = {
+  getAccountUrl: () => manager.buildUrl('/account'),
   getLoginUrl: () => manager.buildUrl('/'),
+  getLogoutUrl: () => manager.buildUrl('/logout'),
+  getRegisterUrl: () => manager.buildUrl('/register'),
 
   getUser: async () => {
     return manager.getUser();
   },
 
-  processMessage: async (message) => {
+  processLoginPostMessage: async (message) => {
     if (typeof message === 'string') {
       message = JSON.parse(message);
     }
@@ -80,7 +83,22 @@ const SJCC_Login = {
     await manager.setUser(message);
 
     return true;
-  }
+  },
+
+  processLogoutPostMessage: async (message) => {
+    if (typeof message === 'string') {
+      message = JSON.parse(message);
+    }
+
+    if (message.action !== 'logout') {
+      return false;
+    }
+
+    await Tokens.forgetTokens();
+    await manager.setUser(null);
+
+    return true;
+  },
 }
 
 export default SJCC_Login;
