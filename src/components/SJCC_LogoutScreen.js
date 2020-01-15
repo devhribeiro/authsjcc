@@ -63,7 +63,7 @@ class SJCC_LogoutScreen extends Component {
       }
 
       SJCC_Login.processLogoutPostMessage(data).then((success) => {
-        success ? this.onLogoutSuccess() : this.onLogoutError(data);
+        success ? this.onLogoutSuccess.call(this) : this.onLogoutError.call(this, data);
       });
     }
 

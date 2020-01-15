@@ -25,16 +25,25 @@ class SJCC_LoginManager {
     this.baseUrl = 'https://signin-wall-staging.accounts.ne10.com.br/api/v2/auth';
   }
 
-  buildUrl = (path) => {
+  buildUrl = (path, parameters) => {
     const url = new URL(path, this.baseUrl);
     url.searchParams.append('api_token', this.config.apiToken);
     url.searchParams.append('type', this.config.type);
+
+    if (parameters) {
+      for (let parameter in parameters) {
+        if (! parameter || ! parameters[parameter]) continue;
+        url.searchParams.append(parameter, parameters[parameter]);
+      }
+    }
 
     return url.href;
   }
 
   getUser = async () => {
-    return await this.user.fromStorage();
+    const user = await this.user.fromStorage();
+
+    if (user.getProfile()) {}
   }
 
   setUser = async (userinfo) => {
@@ -62,12 +71,49 @@ const manager = new SJCC_LoginManager();
 
 const SJCC_Login = {
   getAccountUrl: () => manager.buildUrl('/account'),
-  getLoginUrl: () => manager.buildUrl('/'),
   getLogoutUrl: () => manager.buildUrl('/logout'),
   getRegisterUrl: () => manager.buildUrl('/register'),
 
+  getLoginUrl: (redirectUrl) => {
+    const parameters = redirectUrl ? {'redirect_url': redirectUrl} : null;
+    return manager.buildUrl('/', parameters);
+  },
+
   getUser: async () => {
     return manager.getUser();
+  },
+
+  processCodeToToken: async (code) => {
+    if (! code) return false;
+
+    const url = manager.baseUrl + '/token';
+    const params = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + manager.config.apiToken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'code': code
+      })
+    };
+
+    return fetch(url, params)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (! responseJson.access_token) {
+          console.warn('[Auth API]', responseJson);
+          return false;
+        }
+
+        return Tokens.saveTokens(responseJson).then(() => {
+          return true;
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
 
   processLoginPostMessage: async (message) => {

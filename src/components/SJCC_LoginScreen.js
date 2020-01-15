@@ -37,6 +37,7 @@ class SJCC_LoginScreen extends Component {
 
   componentDidMount() {
     if (development) {
+      console.log('Clearing cache');
       this.getWebView().clearCache(true);
     }
 
@@ -102,7 +103,7 @@ class SJCC_LoginScreen extends Component {
       }
 
       SJCC_Login.processLoginPostMessage(data).then((success) => {
-        success ? this.onLoginSuccess() : this.onLoginError(data);
+        success ? this.onLoginSuccess.call(this) : this.onLoginError.call(this, data);
       });
     }
 
