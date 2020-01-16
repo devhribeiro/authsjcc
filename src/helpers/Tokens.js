@@ -5,7 +5,7 @@ const REFRESH_TOKEN = '_sjcc_refresh_token';
 
 const tryStorage = async (callback) => {
   try {
-    callback();
+    return callback();
   } catch (e) {
     console.error('[Tokens]', e);
   }
@@ -13,21 +13,17 @@ const tryStorage = async (callback) => {
 
 export default Tokens = {
   getAccessToken: async (tokens) => {
-    tryStorage(async () => {
+    return tryStorage(async () => {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN);
       return token ? token : '';
     });
-
-    return '';
   },
 
   getRefreshToken: async (tokens) => {
-    tryStorage(async () => {
+    return tryStorage(async () => {
       const token = await AsyncStorage.getItem(REFRESH_TOKEN);
       return token ? token : '';
     });
-
-    return '';
   },
 
   forgetTokens: async () => {
@@ -38,16 +34,17 @@ export default Tokens = {
   },
 
   saveTokens: async (tokens) => {
-    try {
-      if (tokens.access_token) {
-        await AsyncStorage.setItem(ACCESS_TOKEN, tokens.access_token);
+    tryStorage(async () => {
+      if (! tokens || ! tokens.access_token) {
+        console.error('Tokens are empty');
+        return false;
       }
+
+      await AsyncStorage.setItem(ACCESS_TOKEN, tokens.access_token);
 
       if (tokens.refresh_token) {
         await AsyncStorage.setItem(REFRESH_TOKEN, tokens.refresh_token);
       }
-    } catch (e) {
-      console.error('[Tokens]', e);
-    }
+    });
   }
 };
