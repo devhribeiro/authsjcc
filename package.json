@@ -12,11 +12,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/myvizir/react-native-sjcc-login.git"
+    "url": "git+https://github.com/tecnologiane10/react-native-sjcc-login.git"
   },
-  "scripts": {
-    "postinstall": "scripts/install.js"
-  },
+  "scripts": {},
   "dependencies": {},
   "peerDependencies": {
     "@react-native-community/async-storage": "^1.7.1",
