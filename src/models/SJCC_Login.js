@@ -103,7 +103,7 @@ class SJCC_LoginManager {
 
   isLoggedIn = async (refresh) => {
     const user = this.getUser(refresh);
-    return user ? user.isLoggedIn() : false;
+    return user ? true : false;
   }
 
   getUserinfo = async (tokens) => {
@@ -177,6 +177,10 @@ const SJCC_Login = {
       access_token: accessToken,
       refresh_token: refreshToken,
     };
+  },
+
+  isLoggedIn: async (refresh) => {
+    return manager.isLoggedIn(refresh);
   },
 
   processCodeToToken: async (code) => {
