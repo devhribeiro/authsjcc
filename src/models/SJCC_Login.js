@@ -6,24 +6,34 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Tokens from '../helpers/Tokens';
 import UserManager from '../helpers/UserManager';
 
-class SJCC_LoginManager {
-  constructor() {
-    this.config = require('../../../sjcclogin.json');
+const environments = {
+  staging: 'https://signin-wall-staging.accounts.ne10.com.br/api/v2/auth',
+  production: 'https://signin-wall.accounts.ne10.com.br/api/v2/auth'
+};
 
+class SJCC_LoginManager {
+  initialized = false;
+
+  init(config) {
     // Check Api Token
-    if (! this.config.apiToken) {
-      console.error('"apiToken" is missing from sjcclogin.json');
+    if (! config.apiToken) {
+      console.error('The "apiToken" is missing from SJCC_Login.init');
     }
 
+    this.config = config;
+
     // Make sure type is a integer
-    this.config.type = parseInt(this.config.type || '1');
+    this.config.type = parseInt(config.type || '1');
+
+    // Set Base URL
+    config.env = (config.env || 'staging').toString().toLowerCase();
+    this.baseUrl = environments[config.env] || environments['staging'];
 
     // User
     this.user = null;
     this.usermanager = new UserManager();
 
-    // TODO: make configuration environment
-    this.baseUrl = 'https://signin-wall-staging.accounts.ne10.com.br/api/v2/auth';
+    manager.initialized = true;
   }
 
   buildUrl = (path, parameters) => {
@@ -134,6 +144,18 @@ class SJCC_LoginManager {
 const manager = new SJCC_LoginManager();
 
 const SJCC_Login = {
+  init: (args) => {
+    if (manager.initialized) {
+      console.error('Você só pode configurar o login uma vez.');
+    }
+
+    if (typeof args === 'string') {
+      args = { apiToken: args };
+    }
+
+    manager.init(args);
+  },
+
   getAccountUrl: () => manager.buildUrl('/account'),
   getLogoutUrl: () => manager.buildUrl('/logout'),
   getRegisterUrl: () => manager.buildUrl('/register'),
