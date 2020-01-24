@@ -157,7 +157,6 @@ const SJCC_Login = {
   },
 
   getAccountUrl: () => manager.buildUrl('/account'),
-  getLogoutUrl: () => manager.buildUrl('/logout'),
   getRegisterUrl: () => manager.buildUrl('/register'),
 
   getLoginUrl: (redirectUrl) => {
@@ -181,6 +180,45 @@ const SJCC_Login = {
 
   isLoggedIn: async (refresh) => {
     return manager.isLoggedIn(refresh);
+  },
+
+  logout: async () => {
+    const accessToken = await Tokens.getAccessToken();
+    const refreshToken = await Tokens.getRefreshToken();
+
+    if (! accessToken && ! refreshToken) {
+      return true;
+    }
+
+    const url = manager.baseUrl + '/logout';
+    const params = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + manager.config.apiToken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'access_token': accessToken,
+        'refresh_token': refreshToken
+      })
+    };
+
+    return fetch(url, params)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (typeof responseJson !== 'object') {
+          responseJson = {};
+        }
+
+        if (! responseJson.success) {
+          responseJson.message = responseJson.message || 'Error';
+
+          throw responseJson;
+        }
+
+        return responseJson.success;
+      });
   },
 
   processCodeToToken: async (code) => {
