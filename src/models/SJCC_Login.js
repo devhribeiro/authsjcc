@@ -211,21 +211,25 @@ const SJCC_Login = {
       })
     };
 
-    return fetch(url, params)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (typeof responseJson !== 'object') {
-          responseJson = {};
-        }
+    return manager.logout().then(() => {
+      return fetch(url, params)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (typeof responseJson !== 'object') {
+            responseJson = {};
+          }
 
-        if (! responseJson.success) {
-          responseJson.message = responseJson.message || 'Error';
+          if (! responseJson.success) {
+            responseJson.message = responseJson.message || 'Error';
+            throw responseJson;
+          }
 
-          throw responseJson;
-        }
-
-        return manager.logout();
-      });
+          return true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   },
 
   processCodeToToken: async (code) => {
