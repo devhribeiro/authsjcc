@@ -285,18 +285,6 @@ const SJCC_Login = {
 
     return true;
   },
-
-  processLogoutPostMessage: async (message) => {
-    if (typeof message === 'string') {
-      message = JSON.parse(message);
-    }
-
-    if (message.action !== 'logout') {
-      return false;
-    }
-
-    return manager.logout();
-  },
 }
 
 export default SJCC_Login;
