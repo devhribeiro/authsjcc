@@ -139,6 +139,13 @@ class SJCC_LoginManager {
         console.error(error);
       });
   }
+
+  logout = async () => {
+    await Tokens.forgetTokens();
+    await this.setUser(null);
+
+    return true;
+  }
 };
 
 const manager = new SJCC_LoginManager();
@@ -187,7 +194,7 @@ const SJCC_Login = {
     const refreshToken = await Tokens.getRefreshToken();
 
     if (! accessToken && ! refreshToken) {
-      return true;
+      return manager.logout();
     }
 
     const url = manager.baseUrl + '/logout';
@@ -217,7 +224,7 @@ const SJCC_Login = {
           throw responseJson;
         }
 
-        return responseJson.success;
+        return manager.logout();
       });
   },
 
@@ -248,7 +255,7 @@ const SJCC_Login = {
         return manager.getUserinfo(responseJson)
           .then((userinfo) => {
             if (! userinfo) {
-              return Tokens.forgetTokens().then(() => false);
+              return manager.logout();
             }
 
             manager.setUser(userinfo);
@@ -284,10 +291,7 @@ const SJCC_Login = {
       return false;
     }
 
-    await Tokens.forgetTokens();
-    await manager.setUser(null);
-
-    return true;
+    return manager.logout();
   },
 }
 
