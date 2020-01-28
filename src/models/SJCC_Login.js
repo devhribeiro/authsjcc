@@ -102,7 +102,7 @@ class SJCC_LoginManager {
   }
 
   isLoggedIn = async (refresh) => {
-    const user = this.getUser(refresh);
+    const user = await this.getUser(refresh);
     return user ? true : false;
   }
 
