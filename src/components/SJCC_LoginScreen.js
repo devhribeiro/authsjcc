@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ActivityIndicator, Alert, BackHandler, View } from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, Platform, View } from 'react-native';
 import { WebView, } from 'react-native-webview';
 
 import SJCC_Login from '../models/SJCC_Login';
@@ -60,12 +60,24 @@ class SJCC_LoginScreen extends Component {
     return this.refs['MAIN_WEBVIEW'];
   }
 
+  /**
+   * Try to change the userAgent to make Google login works
+   * @link: https://developer.chrome.com/multidevice/user-agent#webview_user_agent
+   *
+   * @return string
+   */
   createUserAgent() {
     if (! navigator || ! navigator.userAgent) {
       return 'Mozilla/5.0 (Linux; Android 9; Android SDK built for x86 Build/PSR1.180720.093) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Mobile Safari/537.36';
     }
 
-    return navigator.userAgent;
+    const ua = navigator.userAgent;
+
+    if (Platform.OS === 'android') {
+      return ua.replace(/[;]*\s*(wv)\s*/, '').replace(/Version\/([0-9]*\.[0-9]*)/, '');
+    }
+
+    return ua;
   }
 
   async onLoginSuccess() {}
