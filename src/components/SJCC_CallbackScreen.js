@@ -19,6 +19,30 @@ const loadingContainerStyle = {
 };
 
 class SJCC_CallbackScreen extends Component {
+  code
+
+  constructor(props) {
+    super(props);
+
+    this.process();
+  }
+
+  process() {
+    this.code = this.props.code || this.getCode();
+
+    const onSuccess = this.props.onSuccess || this.onSuccess;
+    const onError = this.props.onError || this.onError;
+
+    if (! this.code) {
+      onError.call(this);
+      return;
+    }
+
+    SJCC_Login.processCodeToToken(this.code).then((success) => {
+      success ? onSuccess.call(this) : onError.call(this);
+    });
+  }
+
   getCode() {
     console.error('You must implement getCode on extending "SJCC_CallbackScreen" component.');
   }
@@ -32,19 +56,9 @@ class SJCC_CallbackScreen extends Component {
   }
 
   render() {
-    const code = this.props.code || this.getCode();
-
-    if (! code) {
-      this.onError();
-      return;
+    if (! this.code) {
+      return (null);
     }
-
-    const onSuccess = this.props.onSuccess || this.onSuccess;
-    const onError = this.props.onError || this.onError;
-
-    SJCC_Login.processCodeToToken(code).then((success) => {
-      success ? onSuccess.call(this) : onError.call(this);
-    });
 
     return (
       <View style={ loadingContainerStyle }>
