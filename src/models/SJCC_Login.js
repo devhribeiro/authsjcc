@@ -7,6 +7,7 @@ import Tokens from '../helpers/Tokens';
 import UserManager from '../helpers/UserManager';
 
 const environments = {
+  local: 'https://signin-wall.jc.localtest.me/api/v2/auth',
   staging: 'https://signin-wall-staging.accounts.ne10.com.br/api/v2/auth',
   production: 'https://signin-wall.accounts.ne10.com.br/api/v2/auth'
 };
