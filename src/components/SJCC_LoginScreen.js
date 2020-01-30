@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ActivityIndicator, Alert, BackHandler, Linking, View } from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, View } from 'react-native';
 import { WebView, } from 'react-native-webview';
 
 import SJCC_Login from '../models/SJCC_Login';
@@ -31,7 +31,8 @@ class SJCC_LoginScreen extends Component {
 
     this.state = {
       loading: true,
-      canGoBack: false
+      canGoBack: false,
+      source: SJCC_Login.getLoginUrl()
     };
   }
 
@@ -57,6 +58,14 @@ class SJCC_LoginScreen extends Component {
 
   getWebView() {
     return this.refs['MAIN_WEBVIEW'];
+  }
+
+  createUserAgent() {
+    if (! navigator || ! navigator.userAgent) {
+      return 'Mozilla/5.0 (Linux; Android 9; Android SDK built for x86 Build/PSR1.180720.093) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Mobile Safari/537.36';
+    }
+
+    return navigator.userAgent;
   }
 
   async onLoginSuccess() {}
@@ -92,11 +101,10 @@ class SJCC_LoginScreen extends Component {
         return;
       }
 
-      // TODO: Open Providers
-      // if (data.action && data.link) {
-      //   Linking.openURL(data.link);
-      //   return;
-      // }
+      if (data && data.link && data.provider && data.provider === 'google') {
+        this.setState({ source: data.link });
+        return;
+      }
 
       if (! data.access_token) {
         return;
@@ -107,6 +115,8 @@ class SJCC_LoginScreen extends Component {
       });
     }
 
+    this.webview.userAgent = this.createUserAgent();
+
     this.webview.onNavigationStateChange = (navState) => {
       this.setState({ canGoBack: navState.canGoBack });
     };
@@ -114,7 +124,7 @@ class SJCC_LoginScreen extends Component {
     return (
       <WebView
         ref={'MAIN_WEBVIEW'}
-        source={{ uri: SJCC_Login.getLoginUrl() }}
+        source={{ uri: this.state.source }}
         style={[{ margin: 0, padding: 0, width: '100%', height: '100%' }, this.webview.style || this.props.style || {}]}
 
         {...this.webview}
