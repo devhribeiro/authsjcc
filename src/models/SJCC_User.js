@@ -78,6 +78,26 @@ class SJCC_User {
   getFullname() {
     return this.profile.fullName;
   }
+
+  /**
+   * Get user avatar.
+   * Will try from attribute and from Facebook default avatar.
+   *
+   * @return {string}
+   */
+  getAvatar() {
+    const avatar = this.getAttributeValue('avatar');
+    if (avatar) {
+      return avatar;
+    }
+
+    const facebookId = this.getAttributeValue('facebook_id');
+    if (facebookId) {
+      return `https://graph.facebook.com/${facebookId}/picture`;
+    }
+
+    return '';
+  }
 }
 
 export default SJCC_User;
