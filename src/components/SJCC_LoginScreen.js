@@ -5,7 +5,7 @@ import { WebView, } from 'react-native-webview';
 
 import SJCC_Login from '../models/SJCC_Login';
 
-const development = ! process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+const environment = process.env.NODE_ENV || '';
 
 const loadingContainerStyle = {
   position: 'absolute',
@@ -37,7 +37,7 @@ class SJCC_LoginScreen extends Component {
   }
 
   componentDidMount() {
-    if (development) {
+    if (environment === 'development' && Platform.OS === 'android') {
       console.log('Clearing cache');
       this.getWebView().clearCache(true);
     }
